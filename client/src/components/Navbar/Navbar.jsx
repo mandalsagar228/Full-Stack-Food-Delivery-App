@@ -1,51 +1,67 @@
 import "./Navbar.css";
 import { assets } from "../../assets/assets";
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { Link } from "react-router-dom";
+import PropTypes from "prop-types";
+import { StoreContext } from "../../context/storeContext";
 
-const Navbar = () => {
+const Navbar = ({ setShowLogin }) => {
   const [menu, setMenu] = useState("");
+  const { GetTotalCartItem } = useContext(StoreContext);
   return (
     <>
       <div className="navbar">
-        <img src={assets.logo} alt="logo" className="logo" />
+        <Link to="/">
+          <img src={assets.logo} alt="logo" className="logo" />
+        </Link>
 
         <ul className="navbar-menu">
-          <li
+          <Link
+            to="/"
             onClick={() => setMenu("home")}
             className={menu === "home" ? "active" : ""}
           >
             Home
-          </li>
-          <li
+          </Link>
+          <a
+            href="#explore-menu"
             onClick={() => setMenu("menu")}
             className={menu === "menu" ? "active" : ""}
           >
             Menu
-          </li>
-          <li
+          </a>
+          <a
+            href="#app-download"
             onClick={() => setMenu("mobile_app")}
             className={menu === "mobile_app" ? "active" : ""}
           >
             Mobile App
-          </li>
-          <li
+          </a>
+          <a
+            href="#footer"
             onClick={() => setMenu("contact_us")}
             className={menu === "contact_us" ? "active" : ""}
           >
             Contact Us
-          </li>
+          </a>
         </ul>
         <div className="navbar-right">
           <img src={assets.search_icon} alt="search_icon" />
           <div className="nav-search-icon">
-            <img src={assets.basket_icon} alt="babasket_icon" />
-            <div className="dot"></div>
+            <Link to="/cart">
+              <img src={assets.basket_icon} alt="babasket_icon" />{" "}
+            </Link>
+            <div className={!GetTotalCartItem() ? "" : "dot"}></div>
           </div>
-          <button>Sign In</button>
+          <button onClick={() => setShowLogin(true)}>Sign In</button>
         </div>
       </div>
     </>
   );
+};
+// Prop validation
+Navbar.propTypes = {
+  setShowLogin: PropTypes.func.isRequired,
 };
 
 export default Navbar;
